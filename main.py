@@ -28,8 +28,8 @@ def validate_csv_columns(user_data):
 def get_user_work_details(user_name, date, user_data):
     query = (
         f"Using this data: {user_data}, provide only the following details for {user_name} on {date}: "
-        f"1. Total hours worked. "
-        f"2. What She/He worked on. If no information is available, respond with 'Not worked on anything today.' "
+        f"1. Total hours worked on {date}. "
+        f"2. What She/He worked on {date}. If no information is available, respond with 'Not worked on anything today.' "
         f"Do not include any additional explanations or details."
     )
     result = llm.invoke(query)
