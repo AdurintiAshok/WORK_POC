@@ -4,7 +4,7 @@ import streamlit as st
 from config import GROQ_API_KEY
 
 llm = ChatGroq(
-    temperature=0.6,
+    temperature=0,
     groq_api_key=GROQ_API_KEY,
     model_name="mixtral-8x7b-32768",
     max_retries=2,
@@ -48,7 +48,7 @@ def get_user_work_details(user_name, date_str, filtered_data):
         f"Using this data: {filtered_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
         f"1. Total hours worked on {date_str}. "
         f"2. What {user_name} worked on {date_str}. "
-        f"If no information is available, respond with 'Not worked on anything today.' "
+        f"If no information is available for the user, respond with 'Not worked on anything today.'"
         f"Do not include any additional explanations or details like notes as well."
     )
     result = llm.invoke(query)
