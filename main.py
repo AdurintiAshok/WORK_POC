@@ -41,8 +41,6 @@ def filter_data_by_user_and_date(user_data, user_name, date_str):
 def get_user_work_details(user_name, date_str, filtered_data):
     if filtered_data.empty:
         return "Not worked on anything today."
-
-    # Pass the filtered data to the LLM
     query = (
         f"Using this data: {filtered_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
         f"1. Total hours worked on {date_str}. "
@@ -80,7 +78,7 @@ if st.button("Submit"):
     if user_name and date and not user_data.empty:
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
-            if user_name in user_data["User Name"].values:
+            if user_name.lower() in user_data["User Name"].str.lower().values:
                 date_str = date.strftime("%Y-%m-%d")
                 filtered_data = filter_data_by_user_and_date(user_data, user_name, date_str)
                 with st.spinner('Processing your request...'):
