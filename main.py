@@ -49,7 +49,7 @@ def get_user_work_details(user_name, date_str, filtered_data):
         f"1. Total hours worked on {date_str}. "
         f"2. What {user_name} worked on {date_str}. "
         f"If no information is available, respond with 'Not worked on anything today.' "
-        f"Do not include any additional explanations or details."
+        f"Do not include any additional explanations or details like notes as well."
     )
     result = llm.invoke(query)
     return result.content
