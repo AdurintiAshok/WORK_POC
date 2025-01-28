@@ -37,11 +37,19 @@ def parse_date_column(user_data):
 
 def get_user_work_details(user_name, date_str, user_data):
     query = (
-        f"Using this data: {user_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
-        f"1. Total hours worked.\n"
-        f"2. What {user_name} worked.\n"
-        f"If no information is available for the user, respond with 'Not worked on anything today.dont provide extra details'"
-    )
+    f"Process data only if {user_name} exists in {user_data.to_dict('records')}. "
+    f"Response instructions:\n"
+    f"1. If user doesn't exist: 'User is Not Existed' (final answer)\n"
+    f"2. If exists but no entries on {date_str}: 'Not worked on anything today' (final answer)\n"
+    f"3. If data exists for {date_str}:\n"
+    f"   a. Calculate total hours worked\n"
+    f"   b. List specific tasks/work items\n"
+    f"Format valid response as:\n"
+    f"1. Total hours worked: [X]\n"
+    f"2. Worked on: [Y]\n"
+    f"Prohibited: Any additional commentary or explanations"
+               )
+
     result = llm.invoke(query)
     text = f"{result.content}"
     cleaned_text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
