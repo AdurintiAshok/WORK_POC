@@ -35,7 +35,7 @@ def parse_date_column(user_data):
         return user_data
 
 def filter_data_by_user_and_date(user_data, user_name, date_str):
-    (user_data["User Name"].str.lower() == user_name.lower()) & (user_data["Date"] == date_str)
+    filtered_data=(user_data["User Name"].str.lower() == user_name.lower()) & (user_data["Date"] == date_str)
     return filtered_data
 
 def get_user_work_details(user_name, date_str, filtered_data):
