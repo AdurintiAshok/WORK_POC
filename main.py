@@ -15,15 +15,21 @@ llm = ChatGroq(
 
 def load_csv_data(uploaded_file):
     if uploaded_file is not None:
-         return pd.read_csv(uploaded_file)
+        return pd.read_csv(uploaded_file)
     else:
         return pd.DataFrame()
+
+def validate_csv_columns(user_data):
+    required_columns = ["User Name", "Date"]
+    if not all(column in user_data.columns for column in required_columns):
+        return False, f"CSV file must contain the following columns: {', '.join(required_columns)}"
+    return True, "CSV file is valid."
 
 def get_user_work_details(user_name, date, user_data):
     query = (
         f"Using this data: {user_data}, provide only the following details for {user_name} on {date}: "
         f"1. Total hours worked. "
-        f"2. What She/He worked on.If no information is available, respond with 'Not worked on anything today."
+        f"2. What She/He worked on. If no information is available, respond with 'Not worked on anything today.' "
         f"Do not include any additional explanations or details."
     )
     result = llm.invoke(query)
@@ -34,31 +40,34 @@ st.markdown("### Upload your timesheet CSV file to get work details")
 
 uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
 
-
 user_data = load_csv_data(uploaded_file)
 
 if not user_data.empty:
-    st.success("CSV file loaded successfully!")
+    is_valid, validation_message = validate_csv_columns(user_data)
+    if is_valid:
+        st.success("CSV file loaded successfully!")
+    else:
+        st.error(validation_message)
 else:
     st.warning("Please upload a CSV file.")
 
 st.markdown("### Query Work Details")
 
-
 user_name = st.text_input("Enter the user name:")
-
 
 date = st.date_input("Select the date:")
 
-
 if st.button("GetNow"):
     if user_name and date and not user_data.empty:
-
-        if user_name in user_data["User Name"].values:
-            with st.spinner('Processing your request...'):
-                result = get_user_work_details(user_name, date, user_data)
-                st.success(result)
+        is_valid, validation_message = validate_csv_columns(user_data)
+        if is_valid:
+            if user_name in user_data["User Name"].values:
+                with st.spinner('Processing your request...'):
+                    result = get_user_work_details(user_name, date, user_data)
+                    st.success(result)
+            else:
+                st.warning(f"User name '{user_name}' does not exist in the provided data.")
         else:
-            st.warning(f"User name '{user_name}' is not existed  in the provided data.")
+            st.error(validation_message)
     else:
         st.warning("Please provide both user name and date to proceed.")
