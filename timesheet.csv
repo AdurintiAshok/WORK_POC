@@ -1,0 +1,26 @@
+User Name,Date,Time Spent (hours),Worked on
+John Doe,2025-01-20,2.0,Worked on project documentation
+Jane Smith,2025-01-20,3.0,Developed API endpoints
+Ashok,2025-01-21,4.0,Reviewed code and updated features
+Siva,2025-01-22,2.5,Tested new functionality
+John Doe,2025-01-23,1.5,Worked on UI design
+Jane Smith,2025-01-23,2.0,Created database schema
+Ashok,2025-01-23,3.0,Fixed bugs in existing features
+Siva,2025-01-24,3.5,Implemented new user authentication
+John Doe,2025-01-24,2.0,Worked on API documentation
+Jane Smith,2025-01-24,4.0,Optimized database queries
+Ashok,2025-01-25,1.5,Conducted unit tests
+Siva,2025-01-25,2.5,Reviewed and merged pull requests
+John Doe,2025-01-25,3.0,Refactored code for scalability
+Jane Smith,2025-01-26,2.0,Implemented caching in APIs
+Ashok,2025-01-26,3.5,Worked on front-end development
+Siva,2025-01-26,2.0,Tested the new user interface
+John Doe,2025-01-27,1.0,Fixed deployment issues
+Jane Smith,2025-01-27,3.0,Set up continuous integration
+Ashok,2025-01-27,4.0,Worked on performance improvements
+Siva,2025-01-28,2.5,Reviewed security updates
+John Doe,2025-01-28,3.0,Prepared release notes
+Jane Smith,2025-01-28,2.0,Created test cases for new functionality
+Ashok,2025-01-29,3.0,Debugged user feedback issues
+Siva,2025-01-29,3.5,Refined UI/UX design
+John Doe,2025-01-29,2.5,Developed new feature
