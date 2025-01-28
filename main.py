@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 from config import GROQ_API_KEY
 from io import StringIO
+from datetime import datetime
 
 llm = ChatGroq(
     temperature=0,
@@ -24,6 +25,18 @@ def validate_csv_columns(user_data):
     if not all(column in user_data.columns for column in required_columns):
         return False, f"CSV file must contain the following columns: {', '.join(required_columns)}"
     return True, "CSV file is valid."
+
+def parse_date_column(user_data):
+    """
+    Parse the 'Date' column into a standardized format (YYYY-MM-DD).
+    """
+    try:
+        # Try to parse the 'Date' column into datetime, then format it as YYYY-MM-DD
+        user_data["Date"] = pd.to_datetime(user_data["Date"], infer_datetime_format=True).dt.strftime("%Y-%m-%d")
+        return user_data
+    except Exception as e:
+        st.error(f"Error parsing 'Date' column: {e}")
+        return user_data
 
 def get_user_work_details(user_name, date, user_data):
     query = (
@@ -45,6 +58,8 @@ user_data = load_csv_data(uploaded_file)
 if not user_data.empty:
     is_valid, validation_message = validate_csv_columns(user_data)
     if is_valid:
+        # Parse the 'Date' column into a standardized format
+        user_data = parse_date_column(user_data)
         st.success("CSV file loaded successfully!")
     else:
         st.error(validation_message)
@@ -62,8 +77,10 @@ if st.button("GetNow"):
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
             if user_name in user_data["User Name"].values:
+                # Convert the user input date to the same format as the CSV
+                date_str = date.strftime("%Y-%m-%d")
                 with st.spinner('Processing your request...'):
-                    result = get_user_work_details(user_name, date, user_data)
+                    result = get_user_work_details(user_name, date_str, user_data)
                     st.success(result)
             else:
                 st.warning(f"User name '{user_name}' does not exist in the provided data.")
