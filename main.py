@@ -35,21 +35,12 @@ def parse_date_column(user_data):
         st.error(f"Error parsing 'Date' column: {e}")
         return user_data
 
-def filter_data_by_user_and_date(user_data, user_name, date_str):
-
-    user_data["User Name (Normalized)"] = user_data["User Name"].str.lower()
-    user_name_normalized = user_name.lower()
-    filtered_data = user_data[(user_data["User Name (Normalized)"] == user_name_normalized) & (user_data["Date"] == date_str)]
-    return filtered_data.drop(columns=["User Name (Normalized)"])
-
-def get_user_work_details(user_name, date_str, filtered_data):
-    if filtered_data.empty:
-        return "Not worked on anything today."
+def get_user_work_details(user_name, date_str, user_data):
     query = (
-        f"Using this data: {filtered_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
-        f"1. Total hours worked .\n"
-        f"2. What {user_name} worked . "
-        f"If no information is available for the user, respond with 'Not worked on anything today.'"
+        f"Using this data: {user_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
+        f"1. Total hours worked.\n"
+        f"2. What {user_name} worked.\n"
+        f"If no information is available for the user, respond with 'Not worked on anything today.dont provide extra details'"
     )
     result = llm.invoke(query)
     text = f"{result.content}"
@@ -83,16 +74,10 @@ if st.button("Submit"):
     if user_name and date and not user_data.empty:
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
-            user_data["User Name (Normalized)"] = user_data["User Name"].str.lower()
-            user_name_normalized = user_name.lower()
-            if user_name_normalized in user_data["User Name (Normalized)"].values:
-                date_str = date.strftime("%Y-%m-%d")
-                filtered_data = filter_data_by_user_and_date(user_data, user_name, date_str)
-                with st.spinner('Processing your request...'):
-                    result = get_user_work_details(user_name, date_str, filtered_data)
-                    st.success(result)
-            else:
-                st.warning(f"User name '{user_name}' does not exist in the provided data.")
+            date_str = date.strftime("%Y-%m-%d")
+            with st.spinner('Processing your request...'):
+                result = get_user_work_details(user_name, date_str, user_data)
+                st.success(result)
         else:
             st.error(validation_message)
     else:
