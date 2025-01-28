@@ -79,7 +79,13 @@ user_name = st.text_input("Enter the user name:")
 date = st.date_input("Select the date:")
 
 if st.button("Submit"):
-    if user_name and date and not user_data.empty:
+    if not uploaded_file:
+        st.warning("Please Upload a CSV file.")
+    elif not user_name:
+         st.warning("Please Enter User Name")
+    elif not date:
+        st.warning("Please Select Date")
+    elif user_name and date and not user_data.empty:
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
             date_str = date.strftime("%Y-%m-%d")
@@ -89,4 +95,4 @@ if st.button("Submit"):
         else:
             st.error(validation_message)
     else:
-        st.warning("Please provide both user name and date to proceed.")
+        st.warning("Something Went Wrong")
