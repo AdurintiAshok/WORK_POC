@@ -12,7 +12,11 @@ llm = ChatGroq(
 
 def load_csv_data(uploaded_file):
     if uploaded_file is not None:
-        return pd.read_csv(uploaded_file)
+        if uploaded_file.name.endswith(".csv"):
+            return pd.read_csv(uploaded_file)
+        else:
+            st.error("Please upload a CSV file.")
+            return pd.DataFrame() 
     else:
         return pd.DataFrame()
 
