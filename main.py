@@ -1,5 +1,4 @@
 from uuid import uuid4
-from langchain_chroma import Chroma
 from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_groq import ChatGroq
 import pandas as pd
