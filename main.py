@@ -41,13 +41,17 @@ def filter_data_by_user_and_date(user_data, user_name, date_str):
 def get_user_work_details(user_name, date_str, filtered_data):
     if filtered_data.empty:
         return "Not worked on anything today."
-    total_hours = filtered_data["Hours"].sum()
-    tasks = filtered_data["Task"].tolist()
-    response = (
-        f"Total hours worked on {date_str}: {total_hours}\n"
-        f"What {user_name} worked on {date_str}: {', '.join(tasks)}"
+
+    # Pass the filtered data to the LLM
+    query = (
+        f"Using this data: {filtered_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
+        f"1. Total hours worked on {date_str}. "
+        f"2. What {user_name} worked on {date_str}. "
+        f"If no information is available, respond with 'Not worked on anything today.' "
+        f"Do not include any additional explanations or details."
     )
-    return response
+    result = llm.invoke(query)
+    return result.content
 
 st.title("Work Summary App")
 st.markdown("### Upload your timesheet CSV file to get work details")
