@@ -36,7 +36,12 @@ def parse_date_column(user_data):
         return user_data
 
 def get_user_work_details(user_name, date_str, user_data):
-
+    with st.sidebar.expander("Help & Instructions 📚"):
+         st.markdown("""
+        - **Step 1**: Upload your timesheet CSV containing columns: `User Name`, `Date`, `Hours`, and `Task`.
+        - **Step 2**: Enter the user name and select a date.
+        - **Step 3**: Click **Submit** to get the details of the user's work on that date, including total hours worked and tasks.
+    """)
     query = (
     f"Process data only if {user_name} exists in {user_data.to_dict('records')}. "
     f"Response instructions:\n"
@@ -98,9 +103,3 @@ if st.button("Submit"):
             st.error(validation_message)
     else:
         st.warning("Something Went Wrong")
-with st.sidebar.expander("Help & Instructions 📚"):
-    st.markdown("""
-        - **Step 1**: Upload your timesheet CSV containing columns: `User Name`, `Date`, `Hours`, and `Task`.
-        - **Step 2**: Enter the user name and select a date.
-        - **Step 3**: Click **Submit** to get the details of the user's work on that date, including total hours worked and tasks.
-    """)
