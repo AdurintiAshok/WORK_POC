@@ -76,7 +76,7 @@ user_name = st.text_input("Enter the user name:")
 
 date = st.date_input("Select the date:")
 
-if st.button("GetNow"):
+if st.button("Submit"):
     if user_name and date and not user_data.empty:
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
