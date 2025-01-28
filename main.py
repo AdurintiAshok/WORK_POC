@@ -4,17 +4,17 @@ import streamlit as st
 from config import GROQ_API_KEY
 
 llm = ChatGroq(
-    temperature=0.9,
+    temperature=0.6,
     groq_api_key=GROQ_API_KEY,
     model_name="mixtral-8x7b-32768",
-    max_retries=3,
+    max_retries=2,
 )
 
 def load_csv_data(uploaded_file):
     if uploaded_file is not None:
         return pd.read_csv(uploaded_file)
     else:
-        return "Uploaded Csv file is Empty"
+        return pd.DataFrame()
 
 def validate_csv_columns(user_data):
     required_columns = ["User Name", "Date", "Hours", "Task"]
