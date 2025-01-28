@@ -47,7 +47,7 @@ def get_user_work_details(user_name, date_str, filtered_data):
         return "Not worked on anything today."
     query = (
         f"Using this data: {filtered_data.to_dict('records')}, provide only the following details for {user_name} on {date_str}: "
-        f"1. Total hours worked on {date_str}. "
+        f"1. Total hours worked on {date_str}.\n"
         f"2. What {user_name} worked on {date_str}. "
         f"If no information is available for the user, respond with 'Not worked on anything today.'"
     )
