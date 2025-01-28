@@ -1,3 +1,4 @@
+import re
 from langchain_groq import ChatGroq
 import pandas as pd
 import streamlit as st
@@ -6,7 +7,7 @@ from config import GROQ_API_KEY
 llm = ChatGroq(
     temperature=0,
     groq_api_key=GROQ_API_KEY,
-    model_name="mixtral-8x7b-32768",
+    model_name="deepseek-r1-distill-llama-70b",
     max_retries=2,
 )
 
@@ -49,10 +50,11 @@ def get_user_work_details(user_name, date_str, filtered_data):
         f"1. Total hours worked on {date_str}. "
         f"2. What {user_name} worked on {date_str}. "
         f"If no information is available for the user, respond with 'Not worked on anything today.'"
-        f"Do not include any additional explanations or details like notes as well."
     )
     result = llm.invoke(query)
-    return result.content
+    text = f"{result.content}"
+    cleaned_text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+    return cleaned_text
 
 st.title("Work Summary App")
 st.markdown("### Upload your timesheet CSV file to get work details")
