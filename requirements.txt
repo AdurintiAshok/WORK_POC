@@ -1,0 +1,6 @@
+uuid
+langchain-community
+langchain-chroma
+langchain-groq
+pandas
+streamlit
