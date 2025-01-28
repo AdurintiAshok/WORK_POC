@@ -31,7 +31,7 @@ def parse_date_column(user_data):
         return user_data
 
 def filter_data_by_user_and_date(user_data, user_name, date_str):
-    # Normalize the 'User Name' column and the input user_name to lowercase for case-insensitive matching
+
     user_data["User Name (Normalized)"] = user_data["User Name"].str.lower()
     user_name_normalized = user_name.lower()
     filtered_data = user_data[(user_data["User Name (Normalized)"] == user_name_normalized) & (user_data["Date"] == date_str)]
@@ -77,7 +77,6 @@ if st.button("Submit"):
     if user_name and date and not user_data.empty:
         is_valid, validation_message = validate_csv_columns(user_data)
         if is_valid:
-            # Normalize the 'User Name' column for case-insensitive matching
             user_data["User Name (Normalized)"] = user_data["User Name"].str.lower()
             user_name_normalized = user_name.lower()
             if user_name_normalized in user_data["User Name (Normalized)"].values:
