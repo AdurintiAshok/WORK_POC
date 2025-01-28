@@ -1,24 +1,20 @@
-from uuid import uuid4
-from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_groq import ChatGroq
 import pandas as pd
 import streamlit as st
 from config import GROQ_API_KEY
-from io import StringIO
-from datetime import datetime
 
 llm = ChatGroq(
-    temperature=0,
+    temperature=0.9,
     groq_api_key=GROQ_API_KEY,
     model_name="mixtral-8x7b-32768",
-    max_retries=2,
+    max_retries=3,
 )
 
 def load_csv_data(uploaded_file):
     if uploaded_file is not None:
         return pd.read_csv(uploaded_file)
     else:
-        return pd.DataFrame()
+        return "Uploaded Csv file is Empty"
 
 def validate_csv_columns(user_data):
     required_columns = ["User Name", "Date", "Hours", "Task"]
