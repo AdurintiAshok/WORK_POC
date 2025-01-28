@@ -56,7 +56,7 @@ def get_user_work_details(user_name, date_str, user_data):
     cleaned_text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
     return cleaned_text
 
-st.title("AI Work Summary App")
+st.title("TRACK WORK")
 st.markdown("### Upload your timesheet CSV file to get work details")
 
 uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
