@@ -38,15 +38,25 @@ def parse_date_column(user_data):
         st.error(f"Error parsing 'Date' column: {e}")
         return user_data
 
-def get_user_work_details(user_name, date, user_data):
-    query = (
-        f"Using this data: {user_data}, provide only the following details for {user_name} on {date}: "
-        f"1. Total hours worked on {date}. "
-        f"2. What She/He worked on {date}. If no information is available, respond with 'Not worked on anything today.' "
-        f"Do not include any additional explanations or details."
+def filter_data_by_user_and_date(user_data, user_name, date_str):
+    """
+    Filter the data for the specific user and date.
+    """
+    filtered_data = user_data[(user_data["User Name"] == user_name) & (user_data["Date"] == date_str)]
+    return filtered_data
+
+def get_user_work_details(user_name, date_str, filtered_data):
+    if filtered_data.empty:
+        return "Not worked on anything today."
+
+    total_hours = filtered_data["Hours"].sum()
+    tasks = filtered_data["Task"].tolist()
+
+    response = (
+        f"Total hours worked on {date_str}: {total_hours}\n"
+        f"What {user_name} worked on {date_str}: {', '.join(tasks)}"
     )
-    result = llm.invoke(query)
-    return result.content
+    return response
 
 st.title("Work Summary App")
 st.markdown("### Upload your timesheet CSV file to get work details")
@@ -61,6 +71,7 @@ if not user_data.empty:
         # Parse the 'Date' column into a standardized format
         user_data = parse_date_column(user_data)
         st.success("CSV file loaded successfully!")
+        st.write("Sample data:", user_data.head())  # Debugging: Display sample data
     else:
         st.error(validation_message)
 else:
@@ -79,8 +90,11 @@ if st.button("GetNow"):
             if user_name in user_data["User Name"].values:
                 # Convert the user input date to the same format as the CSV
                 date_str = date.strftime("%Y-%m-%d")
+                # Filter the data for the specific user and date
+                filtered_data = filter_data_by_user_and_date(user_data, user_name, date_str)
+                st.write("Filtered data:", filtered_data)  # Debugging: Display filtered data
                 with st.spinner('Processing your request...'):
-                    result = get_user_work_details(user_name, date_str, user_data)
+                    result = get_user_work_details(user_name, date_str, filtered_data)
                     st.success(result)
             else:
                 st.warning(f"User name '{user_name}' does not exist in the provided data.")
