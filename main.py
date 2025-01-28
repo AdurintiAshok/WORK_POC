@@ -92,7 +92,6 @@ if st.button("GetNow"):
                 date_str = date.strftime("%Y-%m-%d")
                 # Filter the data for the specific user and date
                 filtered_data = filter_data_by_user_and_date(user_data, user_name, date_str)
-                st.write("Filtered data:", filtered_data)  # Debugging: Display filtered data
                 with st.spinner('Processing your request...'):
                     result = get_user_work_details(user_name, date_str, filtered_data)
                     st.success(result)
