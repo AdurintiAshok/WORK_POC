@@ -75,12 +75,7 @@ else:
 
 
 st.markdown("### Query Work Details")
-with st.sidebar.expander("Help & Instructions 📚"):
-    st.markdown("""
-    - **Step 1**: Upload your timesheet CSV containing columns: `User Name`, `Date`, `Hours`, and `Task`.
-    - **Step 2**: Enter the user name and select a date.
-    - **Step 3**: Click **Submit** to get the details of the user's work on that date, including total hours worked and tasks.
-    """)
+
 user_name = st.text_input("Enter the user name:")
 
 date = st.date_input("Select the date:")
@@ -103,3 +98,9 @@ if st.button("Submit"):
             st.error(validation_message)
     else:
         st.warning("Something Went Wrong")
+with st.sidebar.expander("Help & Instructions 📚"):
+    st.markdown("""
+        - **Step 1**: Upload your timesheet CSV containing columns: `User Name`, `Date`, `Hours`, and `Task`.
+        - **Step 2**: Enter the user name and select a date.
+        - **Step 3**: Click **Submit** to get the details of the user's work on that date, including total hours worked and tasks.
+    """)
